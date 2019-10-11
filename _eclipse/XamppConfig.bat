@@ -1,0 +1,1 @@
+start C:\Users\Public\xampp\xampp-control.exe &
