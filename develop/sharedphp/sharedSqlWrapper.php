@@ -66,7 +66,7 @@ function shareSqlWrapper_userCreate($username, $firstname, $lastname, $email, $p
             . "'" . $username . "', '" . $firstname . "', '" . $lastname . "', '" . $email . "', '" . $passwordMD5 . "', 0)";
 
     /* query the database */
-    $sqlResult = $sqlConnection->query ($sqlStatement);
+    $sqlResult = $sqlConnection->query($sqlStatement);
     if ($sqlResult != TRUE)
         goto end;
 
@@ -76,5 +76,31 @@ end:
     sharedSqlWrapper_disconnect($sqlConnection);
     return $returnValue;
 }
+
+
+function shareSqlWrapper_updateUserPassword($userid, $passwordMD5)
+{
+    $returnValue = -1;
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* update into users */
+    $sqlStatement = "UPDATE users SET password ='" . $passwordMD5 . "' where userid = " . $userid;
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    $returnValue = 0;
+
+end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
 
 ?>

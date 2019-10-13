@@ -11,6 +11,7 @@
 
    /* config is needed for connection to db */
    include "config.php";
+   include "sharedphp/sharedHelpers.php";
 
    /* open sql connection */
    $sqlConnection = new mysqli ( $dbhost, $dbuser, $dbpass, $dbase );
@@ -29,8 +30,7 @@
    while(($userFromDatabase = $result->fetch_assoc()) != false)
    {
        $users[$userFromDatabase['userid']] = $userFromDatabase;
-       $imgUserFileName = "users/" . $userFromDatabase['userid'] . ".jpg";
-       $imgFileName = file_exists($imgUserFileName) ? $imgUserFileName : $ConfigNoImageForUser;
+       $imgFileName = sharedHelpers_getUserImageFile($userFromDatabase['userid']);
        $imgs[$userFromDatabase['userid']] = $link[$userFromDatabase['userid']]  = "<img src=\"" . $imgFileName . "\" border=\"4\" alt=\"" . $userFromDatabase['firstname'] . "\">  ";
    }
 ?>
