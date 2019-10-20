@@ -101,8 +101,8 @@
                   </tr>
                   <tr>
                      <td></td>
-                     <td><input name="newname"</td>
-                     <td><input name="newdesc"</td>
+                     <td><input name="newname" /></td>
+                     <td><input name="newdesc" /></td>
                      <td><input type="submit" name="add" value="add" /></td>
                   </tr>
                   <?php
@@ -117,6 +117,8 @@
                         else
                            echo "<td>" . "<input type=\"submit\" value=\"delete\" name=\"del" . $databuf[$i]['pid'] ."\"" . "</td>";
                         echo "</td>";
+
+                        echo "</tr>";
                      }
                   ?>
                </table>

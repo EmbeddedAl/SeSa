@@ -73,7 +73,10 @@
 				    <td align="left">Email:</td>
 				    <td align="left"><?php echo $_SESSION["email"]; ?></td>
                 </tr>
-
+				<tr>
+				    <td align="left">City:</td>
+				    <td align="left"><?php echo $_SESSION["city"]; ?></td>
+                </tr>
 
 
 

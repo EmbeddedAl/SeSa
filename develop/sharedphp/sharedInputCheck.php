@@ -101,6 +101,31 @@ function sharedInputCheck_isEmailValid($email)
 }
 
 
+function sharedInputCheck_isCityValid($city)
+{
+    include 'config.php';
+
+    // Check: not empty
+    if (strlen($city) == 0)
+        return 0;
+
+    // Check: not default
+    if ($city === $DefaultCity)
+        return 0;
+
+    // Check: Only valid characters
+    if (strlen(!preg_match("/^[a-zA-Z]+$/", $city)) != 0)
+        return 0;
+
+    // Check: Not exceeding maxlen
+    if (strlen($city) > $MaxCharCity)
+        return 0;
+
+    // input seems valid
+    return 1;
+}
+
+
 function sharedInputCheck_isPasswordValid($pass)
 {
     include 'config.php';

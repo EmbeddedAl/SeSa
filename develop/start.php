@@ -42,6 +42,7 @@
          $_SESSION["firstname"] = $userFromDatabase['firstname'];
          $_SESSION["lastname"]  = $userFromDatabase['lastname'];
          $_SESSION["email"]     = $userFromDatabase['email'];
+         $_SESSION["city"]      = $userFromDatabase['city'];
          if ($userFromDatabase['isadmin'] == 1)
             $_SESSION["isadmin"] = 1;
       }

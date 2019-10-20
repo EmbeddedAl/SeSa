@@ -32,6 +32,7 @@
                             firstname varchar(".$MaxCharFirstname.") DEFAULT NULL,
                             username varchar(".$MaxCharUsername.") DEFAULT NULL,
                             email varchar(".$MaxCharEmail.") DEFAULT NULL,
+                            city varchar(".$MaxCharCity.") DEFAULT NULL,
                             password varchar(32) DEFAULT NULL,
                             isadmin INT NOT NULL
                             ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
@@ -46,7 +47,7 @@
         $sqlStatement = "CREATE TABLE IF NOT EXISTS presents (
                             pid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             pname varchar(100) DEFAULT NULL,
-                            pdesc varchar(100) DEFAULT NULL,
+                            pdesc varchar(500) DEFAULT NULL,
                             puserid INT DEFAULT NULL,
                             plockid INT DEFAULT NULL
                             ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
@@ -56,6 +57,31 @@
             return;
         }
         echo "CREATE TABLE IF NOT EXISTS 'presents' returned successfully<br>";
+
+        /* create table presents */
+        $sqlStatement = "CREATE TABLE IF NOT EXISTS settings (
+                            setting varchar(100) DEFAULT NULL,
+                            value INT DEFAULT NULL) ENGINE=MyISAM DEFAULT CHARSET=latin1";
+        if ($sqlConnection->query ( $sqlStatement ) != TRUE)
+        {
+            echo "Error creating table: " . $sqlConnection->error . "<br>";
+            return;
+        }
+        echo "CREATE TABLE IF NOT EXISTS 'settings' returned successfully<br>";
+
+        /* insert default settings */
+        $sqlStatement = "INSERT INTO settings (setting, value) VALUES
+                            ('registrationActive',       1),
+                            ('numberOfPresentsPerUser',  2)";
+
+        if ($sqlConnection->query ( $sqlStatement ) != TRUE)
+        {
+            echo "Error inserting into table: " . $sqlConnection->error . "<br>";
+            return;
+        }
+        echo "INSERT INTO 'settings' returned successfully<br>";
+
+
         echo "End of routine<br>";
         return;
     }
@@ -65,17 +91,17 @@
         echo "<h2> Insert demo users to database:</h2>";
 
         /* insert demo users */
-        $sqlStatement = "INSERT INTO users (lastname, firstname, username, email, password, isadmin) VALUES
-                            ('Hamming',    'Richard',   'hamming',    'info0@ThisShouldNotBeAValid.Domain', md5('password'), 1),
-                            ('Leibniz',    'Gottfried', 'leibnitz',   'info1@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Lovelace',   'Ada',       'lovelace',   'info2@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Ritchie',    'Dennis',    'ritchie',    'info3@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Shannon',    'Claude',    'shannon',    'info4@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Stallman',   'Richard',   'stallman',   'info5@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Tannenbaum', 'Andrew',    'tannenbaum', 'info6@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Torvalds',   'Linus',     'torvalds',   'info7@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Turing',     'Alan',      'turing',     'info8@ThisShouldNotBeAValid.Domain', md5('password'), 0),
-                            ('Zuse',       'Konrad',    'zuse',       'info9@ThisShouldNotBeAValid.Domain', md5('password'), 0)";
+        $sqlStatement = "INSERT INTO users (lastname, firstname, username, email, city, password, isadmin) VALUES
+                            ('Hamming',    'Richard',   'hamming',    'info0@ThisShouldNotBeAValid.Domain', 'Berlin',    md5('password'), 1),
+                            ('Leibniz',    'Gottfried', 'leibnitz',   'info1@ThisShouldNotBeAValid.Domain', 'Berlin',    md5('password'), 0),
+                            ('Lovelace',   'Ada',       'lovelace',   'info2@ThisShouldNotBeAValid.Domain', 'Berlin',    md5('password'), 0),
+                            ('Ritchie',    'Dennis',    'ritchie',    'info3@ThisShouldNotBeAValid.Domain', 'Munich',    md5('password'), 0),
+                            ('Shannon',    'Claude',    'shannon',    'info4@ThisShouldNotBeAValid.Domain', 'Munich',    md5('password'), 0),
+                            ('Stallman',   'Richard',   'stallman',   'info5@ThisShouldNotBeAValid.Domain', 'Berlin',    md5('password'), 0),
+                            ('Tannenbaum', 'Andrew',    'tannenbaum', 'info6@ThisShouldNotBeAValid.Domain', 'Hamburg',   md5('password'), 0),
+                            ('Torvalds',   'Linus',     'torvalds',   'info7@ThisShouldNotBeAValid.Domain', 'Stuttgart', md5('password'), 0),
+                            ('Turing',     'Alan',      'turing',     'info8@ThisShouldNotBeAValid.Domain', 'Leipzig',   md5('password'), 0),
+                            ('Zuse',       'Konrad',    'zuse',       'info9@ThisShouldNotBeAValid.Domain', 'Berlin',    md5('password'), 0)";
 
         if ($sqlConnection->query ( $sqlStatement ) != TRUE)
         {
@@ -108,6 +134,15 @@
             return;
         }
         echo "DROP TABLE IF EXISTS 'presents' returned successfully<br>";
+
+        /* drop table settings */
+        $sqlStatement = "DROP TABLE IF EXISTS settings";
+        if ($sqlConnection->query ( $sqlStatement ) != TRUE)
+        {
+            echo "Error dropping table: " . $sqlConnection->error . "<br>";
+            return;
+        }
+        echo "DROP TABLE IF EXISTS 'settings' returned successfully<br>";
 
         echo "End of routine<br>";
         return;

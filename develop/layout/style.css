@@ -10,6 +10,13 @@ body
    text-align: center;
 }
 
+div#table
+{
+   text-align: left;
+   width: 150px;
+   word-wrap: break-word;
+}
+
 /* Division type definitions */
 /* picBackground.png originally published as snow1.png on
  * on OpenGameArt.org under Creative Commons License CC0
