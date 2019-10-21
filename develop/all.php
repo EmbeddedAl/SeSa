@@ -1,10 +1,9 @@
+<?php session_start(); ?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
        "http://www.w3.org/TR/html4/strict.dtd">
 
 <?php
-   /* always start session */
-   session_start();
-
    /* require user to be logged in */
    if (!isset($_SESSION["userid"]))
       echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
