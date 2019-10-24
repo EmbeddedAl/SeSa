@@ -16,6 +16,9 @@
     if (!isset($_SESSION["isadmin"]))
         echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
 
+    /* get number of registered users for admin mapping table */
+    $NumberOfUsers = sharesSqlWrapper_getNumberOfUsers();
+
     /* ToggleRegistration */
     $RegistrationActive = sharedSqlWrapper_isRegistrationActive();
     if (isset($_POST['toggleRegistration']))
@@ -113,6 +116,28 @@
                         		<td> <input type="submit" name="randomize" value="Randomize Users" /></td>
                         		<td> </td>
                         	</tr>
+
+                        	<?php
+
+                        	for ($x = 1; $x <= $NumberOfUsers; $x++)
+                        	{
+                        	    $UserFirstName = sharedSqlWrapper_getFirstName($x);
+                        	    $UserLastName = sharedSqlWrapper_getLastName($x);
+                        	    $Leaf1UserId = sharedSqlWrapper_getUseridOfReceiveLeaf($x, 1);
+                        	    $Leaf1FirstName = sharedSqlWrapper_getFirstName($Leaf1UserId);
+                        	    $Leaf1LastName = sharedSqlWrapper_getLastName($Leaf1UserId);
+                        	    $Leaf2UserId = sharedSqlWrapper_getUseridOfReceiveLeaf($x, 2);
+                        	    $Leaf2FirstName = sharedSqlWrapper_getFirstName($Leaf2UserId);
+                        	    $Leaf2LastName = sharedSqlWrapper_getLastName($Leaf2UserId);
+
+                        	    echo "<tr>";
+                        	    echo "<td>$UserFirstName $UserLastName ($x)</td>";
+                        	    echo "<td>$Leaf1FirstName $Leaf1LastName ($Leaf1UserId) </td>";
+                        	    echo "<td>$Leaf2FirstName $Leaf2LastName ($Leaf2UserId) </td>";
+                        	    echo "</tr>";
+                        	}
+
+                        	?>
                 	    </table>
               	  	</form>
 

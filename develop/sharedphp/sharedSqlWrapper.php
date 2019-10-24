@@ -306,6 +306,121 @@ end:
 }
 
 
+
+function sharedSqlWrapper_getFirstName($userid)
+{
+    $returnValue = "undefined";
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* check username/password with database */
+    $sqlStatement = "SELECT * from `users` WHERE `userid` = '"  . $userid . "'";
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query ($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    /* there should be exactly one users */
+    if ($sqlResult->num_rows == 1)
+    {
+        /* get the actual data base row */
+        $sqlRow = $sqlResult->fetch_assoc();
+        $returnValue = $sqlRow['firstname'];
+    }
+
+    end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+
+
+function sharedSqlWrapper_getLastName($userid)
+{
+    $returnValue = "undefined";
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* check username/password with database */
+    $sqlStatement = "SELECT * from `users` WHERE `userid` = '"  . $userid . "'";
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query ($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    /* there should be exactly one users */
+    if ($sqlResult->num_rows == 1)
+    {
+        /* get the actual data base row */
+        $sqlRow = $sqlResult->fetch_assoc();
+        $returnValue = $sqlRow['lastname'];
+    }
+
+    end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+
+function sharedSqlWrapper_getUseridOfReceiveLeaf($userid, $leafNo)
+{
+    $returnValue = -1;
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    $ColumnName = "receiveLeaf0" . $leafNo;
+
+    // get the leaf_id
+    $sqlStatement = "SELECT $ColumnName from `mapping` WHERE `user_id` = '"  . $userid . "'";
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query ($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    /* there should be exactly one entry */
+    if ($sqlResult->num_rows == 1)
+    {
+        /* get the actual data base row */
+        $sqlRow = $sqlResult->fetch_assoc();
+        $leafid = $sqlRow[$ColumnName];
+
+        // get the userid to that leafid
+        $sqlStatement = "SELECT user_id from `mapping` WHERE `leaf_id` = '"  . $leafid . "'";
+
+        /* query the database */
+        $sqlResult = $sqlConnection->query ($sqlStatement);
+        if ($sqlResult != TRUE)
+            goto end;
+
+        /* there should be exactly one entry */
+        if ($sqlResult->num_rows == 1)
+        {
+            /* get the actual data base row */
+            $sqlRow = $sqlResult->fetch_assoc();
+            $returnValue = $sqlRow['user_id'];
+        }
+    }
+
+    end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+
+
+
 function shareSqlWrapper_userCreate($username, $firstname, $lastname, $email, $city, $passwordMD5)
 {
     $returnValue = -1;
