@@ -19,8 +19,6 @@ $DefaultEmail = "email";
 $DefaultCity = "city";
 $DefaultPassword = "";
 
-$ConfigDebug=0;
-
 $ConfigNoImageForUser = "users/noPicture.jpg";
 
 ?>

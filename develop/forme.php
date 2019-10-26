@@ -111,7 +111,11 @@
                         echo "<td>" . ($i+1) . "</td>";
                         echo "<td>" . $databuf[$i]['pname'] . "</td>";
                         echo "<td>" . $databuf[$i]['pdesc'] . "</td>";
-                        if ($ConfigPhase2Active != 0)
+
+                        // in case the mapping table is released, deletion is not possible anymore
+                        $settingMappingTableReleasedToUsers = sharedSqlWrapper_getSettingMappingReleasedToUsers();
+
+                        if ($settingMappingTableReleasedToUsers == 1)
                            echo "<td></td>";
                         else
                            echo "<td>" . "<input type=\"submit\" value=\"delete\" name=\"del" . $databuf[$i]['pid'] ."\"" . "</td>";
