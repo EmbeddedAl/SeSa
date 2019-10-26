@@ -109,7 +109,9 @@ function sharedSqlWrapper_randomizeUsersToMapping()
     {
         do
         {
-            /* find out who is next (circular approach) */
+            /* find out who is next (circular approach)
+             * take a random number between 1 and number of users
+             */
             $next = rand(1, $numberUsers);
 
             /* if self is found, try again */
@@ -143,7 +145,7 @@ function sharedSqlWrapper_createMappingTable($numPresents)
         return $returnValue;
 
     // TODO: Set in settings
-    // TODO: Set in mapping gable
+    // TODO: Set in mapping table
 
     /* check table already there */
     if (sharedSqlWrapper_existsMappingTable() == 1)
@@ -163,47 +165,68 @@ function sharedSqlWrapper_createMappingTable($numPresents)
     /* extract the number of users */
     $numberUsers = sharesSqlWrapper_getNumberOfUsers();
 
+    /* the mapping table is a ram copy of what is in the sql database */
+    $mappingTable;
+
     /* create as many mapping leafs as there are users */
-    for ($x = 1; $x <= $numberUsers; $x++)
+    for ($thisMappingRow = 1; $thisMappingRow <= $numberUsers; $thisMappingRow++)
     {
         /* find out who is next (circular approach) */
-        $next = ($x+1);
-        if ($next > $numberUsers)
-            $next = 1;
+        $nextRowNumber = ($thisMappingRow + 1);
+        if ($nextRowNumber > $numberUsers)
+            $nextRowNumber = 1;
 
-        /* and insert it into database */
-        $sqlStatement = "INSERT INTO mapping (receiveLeaf01) VALUES (".$next.")";
+        /* and insert it into database - hereby a new row will be added to mapping */
+        $sqlStatement = "INSERT INTO mapping (receiveLeaf01) VALUES (" . $nextRowNumber . ")";
         if ($sqlConnection->query( $sqlStatement ) != TRUE)
             goto end;
+
+        /* also store this information in the ram copy */
+        $mappingTable[$thisMappingRow]['receiveLeaf01'] = $nextRowNumber;
     }
 
-    /* randomize the second receive leaf with an randomized approach */
+    /* fill the second receive leaf with a randomized approach */
     $PoolOfCompleted = [];
-    for ($x = 1; $x <= $numberUsers; $x++)
+    for ($thisMappingRow = 1; $thisMappingRow <= $numberUsers; $thisMappingRow++)
     {
-        while(1)
+        $giveUpCounter = $numberUsers * 10;
+        while(($giveUpCounter--) > 0)
         {
-            /* find out who is next (circular approach) */
-            $next = rand(1, $numberUsers);
+            /* ranodmize someone */
+            $randomRow = rand(1, $numberUsers);
 
             /* if self is found, try again */
-            if ($next == $x)
+            if ($randomRow == $thisMappingRow)
+                continue;
+
+            /* if the random one is already connected, try again */
+            if ($mappingTable[$thisMappingRow]['receiveLeaf01'] == $thisMappingRow)
                 continue;
 
             /* if already in pool of completed, do it again */
-            if (in_array($next, $PoolOfCompleted))
+            if (in_array($randomRow, $PoolOfCompleted))
                 continue;
 
             break;
         }
 
+        if ($giveUpCounter <= 0)
+        {
+            sharedSqlWrapper_dropMappingTable();
+            $returnValue = -2;
+            goto end;
+        }
+
         /* add 'next' to the pool of already used indexes */
-        $PoolOfCompleted[] = $next;
+        $PoolOfCompleted[] = $randomRow;
 
         /* and insert it into database */
-        $sqlStatement = "UPDATE mapping SET receiveLeaf02 ='" . $next . "' WHERE leaf_id = '". $x . "'";
+        $sqlStatement = "UPDATE mapping SET receiveLeaf02 ='" . $randomRow . "' WHERE leaf_id = '". $thisMappingRow . "'";
         if ($sqlConnection->query( $sqlStatement ) != TRUE)
             goto end;
+
+        /* also store this information in the ram copy (even it is not used in the current implementation) */
+        $mappingTable[$thisMappingRow]['receiveLeaf02'] = $randomRow;
     }
 
     $returnValue = 0;
@@ -213,7 +236,56 @@ end:
     return $returnValue;
 }
 
-function sharedSqlWrapper_isRegistrationActive()
+function sharedSqlWrapper_getSettingRegistrationActive()
+{
+    $sqlValue = sharedSqlWrapper_getSetting("registrationActive");
+
+    if ($sqlValue < 0)
+        return $sqlValue;
+
+    /* only values 0 and 1 are valid */
+    if ($sqlValue == 0)
+        return $sqlValue;
+    if ($sqlValue == 1)
+        return $sqlValue;
+
+    return -1;
+}
+function sharedSqlWrapper_setSettingRegistrationActive($value)
+{
+    $dbValue = 0;
+
+    if ($value == 1)
+        $dbValue = 1;
+
+    return sharedSqlWrapper_setSetting("registrationActive", $dbValue);
+}
+
+function sharedSqlWrapper_getSettingMappingReleasedToUsers()
+{
+    $sqlValue = sharedSqlWrapper_getSetting("mappingReleasedToUsers");
+
+    if ($sqlValue < 0)
+        return $sqlValue;
+
+    /* only values 0 and 1 are valid */
+    if ($sqlValue == 0)
+        return $sqlValue;
+    if ($sqlValue == 1)
+        return $sqlValue;
+
+    return -1;
+}
+function sharedSqlWrapper_setSettingMappingReleasedToUsers($value)
+{
+    $dbValue = 0;
+
+    if ($value == 1)
+        $dbValue = 1;
+
+    return sharedSqlWrapper_setSetting("mappingReleasedToUsers", $dbValue);
+}
+function sharedSqlWrapper_getSetting($settingName)
 {
     $returnValue = -1;
 
@@ -223,7 +295,7 @@ function sharedSqlWrapper_isRegistrationActive()
         return $returnValue;
 
     /* check username/password with database */
-    $sqlStatement = "SELECT * from `settings` WHERE `setting` = 'registrationActive'";
+    $sqlStatement = "SELECT * from `settings` WHERE `setting` = '" . $settingName . "'";
 
     /* query the database */
     $sqlResult = $sqlConnection->query ($sqlStatement);
@@ -237,20 +309,15 @@ function sharedSqlWrapper_isRegistrationActive()
     /* get the actual data base row */
     $sqlRow = $sqlResult->fetch_assoc();
 
-    /* only values 0 and 1 are valid */
-    if ($sqlRow['value'] == 0)
-        $returnValue = 0;
-    else if ($sqlRow['value'] == 1)
-        $returnValue = 1;
-    else
-        $returnValue = -1;
+    /* extract the value */
+    $returnValue = $sqlRow['value'];
 
 end:
     sharedSqlWrapper_disconnect($sqlConnection);
     return $returnValue;
 }
 
-function sharedSqlWrapper_setRegistrationActive($value)
+function sharedSqlWrapper_setSetting($settingName, $settingValue)
 {
     $returnValue = -1;
 
@@ -260,7 +327,7 @@ function sharedSqlWrapper_setRegistrationActive($value)
         return $returnValue;
 
     /* update into users */
-    $sqlStatement = "UPDATE settings SET VALUE ='" . $value . "' where setting = 'registrationActive'";
+        $sqlStatement = "UPDATE settings SET VALUE ='" . $settingValue . "' where setting = '". $settingName . "'";
 
     /* query the database */
     $sqlResult = $sqlConnection->query($sqlStatement);

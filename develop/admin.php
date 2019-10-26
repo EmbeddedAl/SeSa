@@ -20,26 +20,30 @@
     $NumberOfUsers = sharesSqlWrapper_getNumberOfUsers();
 
     /* ToggleRegistration */
-    $RegistrationActive = sharedSqlWrapper_isRegistrationActive();
+    $RegistrationActive = sharedSqlWrapper_getSettingRegistrationActive();
     if (isset($_POST['toggleRegistration']))
     {
         if ($RegistrationActive == 0)
         {
             sharedSqlWrapper_dropMappingTable();
-            sharedSqlWrapper_setRegistrationActive(1);
+            sharedSqlWrapper_setSettingMappingReleasedToUsers(0);
+            sharedSqlWrapper_setSettingRegistrationActive(1);
         } else if ($RegistrationActive == 1)
         {
-            sharedSqlWrapper_setRegistrationActive(0);
+            sharedSqlWrapper_setSettingRegistrationActive(0);
         }
 
-        $RegistrationActive = sharedSqlWrapper_isRegistrationActive();
-
+        $RegistrationActive = sharedSqlWrapper_getSettingRegistrationActive();
     }
 
     /* Create mapping table */
     if (isset($_POST['createTable']))
     {
-        sharedSqlWrapper_createMappingTable(2);
+        $returnValue = sharedSqlWrapper_createMappingTable(2);
+        $_SESSION["returnValueCreateMappingTable"] = $returnValue;
+
+        /* if table was created successfully do the initial randomization round automatically */
+        sharedSqlWrapper_randomizeUsersToMapping();
     }
 
     /* Randomize users in */
@@ -48,7 +52,23 @@
         sharedSqlWrapper_randomizeUsersToMapping();
     }
 
+    /* ToggleSettingMappingReleasedToUsers */
+    $SettingMappingReleasedToUsers = sharedSqlWrapper_getSettingMappingReleasedToUsers();
+    if (isset($_POST['toggleSettingMappingReleasedToUsers']))
+    {
+        if ($SettingMappingReleasedToUsers == 0)
+        {
+            sharedSqlWrapper_setSettingMappingReleasedToUsers(1);
+        } else if ($SettingMappingReleasedToUsers == 1)
+        {
+            sharedSqlWrapper_setSettingMappingReleasedToUsers(0);
+        }
+
+        $SettingMappingReleasedToUsers = sharedSqlWrapper_getSettingMappingReleasedToUsers();
+    }
+
     $MappingTableExists = sharedSqlWrapper_existsMappingTable();
+
     $_POST = array();
 ?>
 
@@ -68,16 +88,7 @@
 
          <div id="content">
             <h2>Admin Area</h2>
-            <form action="admin.php">
-               <?php
-                  echo "UNIX TIMESTAMP:" . $ConfigTimestampPhase2 . "<br>";
-                  echo "Date:  <input style=\"width:40px\" name=\"yr\" value=\"".date("Y", $ConfigTimestampPhase2)."\"/> ";
-                  echo "       <input style=\"width:20px\" name=\"mo\" value=\"".date("m", $ConfigTimestampPhase2)."\"/> ";
-                  echo "       <input style=\"width:20px\" name=\"da\" value=\"".date("d", $ConfigTimestampPhase2)."\"/><br>";
-                  echo "Time:  <input style=\"width:20px\" name=\"hr\" value=\"".date("H", $ConfigTimestampPhase2)."\"/>:";
-                  echo "       <input style=\"width:20px\" name=\"mi\" value=\"".date("i", $ConfigTimestampPhase2)."\"/><br>";
-               ?>
-            </form>
+
 
             <!--  Toggle the registration switch -->
             <form action="admin.php" method="post">
@@ -100,13 +111,31 @@
             <?php if ($RegistrationActive == 0) { ?>
             <form action="admin.php" method="post">
                 <table border="1" >
-                	<tr>
-                		<td> Mapping table exists: <br> <?php echo $MappingTableExists; ?></td>
-                		<td> <input type="submit" name="createTable" value="Create Mapping Table" /></td>
-                		<td> </td>
-                	</tr>
+                	<?php
+                    	echo "<tr>";
+                    	echo "<td>Mapping table exists: $MappingTableExists</td>";
+                    	if ($MappingTableExists == 0)
+                    	   echo "<td> <input type=\"submit\" name=\"createTable\" value=\"Create Mapping Table\" /></td>";
+                    	else
+                    	   echo "<td> </td>";
+
+                	    echo "<td> </td>";
+                    	echo "</tr>";
+                	?>
         	    </table>
       	  	</form>
+      	  		<?php if (array_key_exists("returnValueCreateMappingTable", $_SESSION))
+      	  		{
+      	  		    echo "<tr>";
+      	  		    if ($_SESSION["returnValueCreateMappingTable"] == 0)
+      	  		         echo "<td> Mapping table creation: valid</td>";
+  	  		        else if ($_SESSION["returnValueCreateMappingTable"] == -2)
+  	  		            echo "<td> Mapping table creation: INVALID, please retry </td>";
+      	  		    echo "<td></td>";
+      	  		    echo "<td></td>";
+      	  		    echo "</tr>";
+      	  		}
+      	  		?>
 				<?php if ($MappingTableExists == 1) { ?>
 					<!--  Randomize users into mapping table -->
     	            <form action="admin.php" method="post">
@@ -142,20 +171,21 @@
               	  	</form>
 
 
-					Show mapping table here
+                    <form action="admin.php" method="post">
+                        <table border="1" >
+                        	<?php
+                            	echo "<tr>";
+                            	echo "<td>Table is released to users: $SettingMappingReleasedToUsers</td>";
+                            	echo "<td> <input type=\"submit\" name=\"toggleSettingMappingReleasedToUsers\" value=\"Toggle\" /></td>";
+                        	    echo "<td> </td>";
+                            	echo "</tr>";
+                        	?>
+                	    </table>
+      	  			</form>
+
 				<?php } ?>
             <?php } ?>
 
-
-
-
-
-            <?php
-                if ($ConfigPhase2Active == 1)
-                   echo "SYSTEM IN PHASE 2";
-               else
-                   echo "SYSTEM IN PHASE 1";
-            ?>
 		  </div>
 
 		<?php include ("layout/footer.html"); ?>

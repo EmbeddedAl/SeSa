@@ -8,7 +8,7 @@
     include "sharedphp/sharedSqlWrapper.php";
 
     $RegistrationCompleted = FALSE;
-    $RegistrationActive = sharedSqlWrapper_isRegistrationActive();
+    $RegistrationActive = sharedSqlWrapper_getSettingRegistrationActive();
 
     if ($RegistrationActive == 1)
     {

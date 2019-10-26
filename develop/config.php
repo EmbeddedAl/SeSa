@@ -19,10 +19,6 @@ $DefaultEmail = "email";
 $DefaultCity = "city";
 $DefaultPassword = "";
 
-
-$ConfigTimestampPhase2=1570665600;
-$ConfigPhase2Active=0;
-
 $ConfigDebug=0;
 
 $ConfigNoImageForUser = "users/noPicture.jpg";

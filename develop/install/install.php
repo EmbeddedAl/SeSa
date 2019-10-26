@@ -58,7 +58,7 @@
         }
         echo "CREATE TABLE IF NOT EXISTS 'presents' returned successfully<br>";
 
-        /* create table presents */
+        /* create table settings */
         $sqlStatement = "CREATE TABLE IF NOT EXISTS settings (
                             setting varchar(100) DEFAULT NULL,
                             value INT DEFAULT NULL) ENGINE=MyISAM DEFAULT CHARSET=latin1";
@@ -72,6 +72,7 @@
         /* insert default settings */
         $sqlStatement = "INSERT INTO settings (setting, value) VALUES
                             ('registrationActive',       1),
+                            ('mappingReleasedToUsers',   0),
                             ('numberOfPresentsPerUser',  2)";
 
         if ($sqlConnection->query ( $sqlStatement ) != TRUE)
