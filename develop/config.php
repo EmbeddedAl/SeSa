@@ -8,7 +8,7 @@ $dbase  = "sesa";
 $MaxCharUsername=25;
 $MaxCharFirstname=25;
 $MaxCharLastname=30;
-$MaxCharEmail=25;
+$MaxCharEmail=50;
 $MaxCharCity=15;
 $MinPasswordLen=8;
 
