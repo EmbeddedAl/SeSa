@@ -80,15 +80,15 @@
 
 
 <html>
-	<head>
-		<?php include ("layout/title.html"); ?>
-		<link rel="stylesheet" href="layout/style.css">
-	</head>
+    <head>
+        <?php include ("layout/title.html"); ?>
+        <link rel="stylesheet" href="layout/style.css">
+    </head>
 
-	<body>
-		<div id="page">
-			<?php include ("layout/header.html"); ?>
-			<?php include ("layout/nav.html"); ?>
+    <body>
+        <div id="page">
+            <?php include ("layout/header.html"); ?>
+            <?php include ("layout/nav.html"); ?>
 
          <div id="content">
             <h2>Admin Area</h2>
@@ -97,103 +97,103 @@
             <!--  Toggle the registration switch -->
             <form action="admin.php" method="post">
                 <table border="1" >
-                	<tr>
+                    <tr>
 
-                		<td> Current RegistrationActiveSetting: <br> <?php echo $RegistrationActive; ?> </td>
-                		<td> <input type="submit" name="toggleRegistration" value="Toggle" /></td>
+                        <td> Current RegistrationActiveSetting: <br> <?php echo $RegistrationActive; ?> </td>
+                        <td> <input type="submit" name="toggleRegistration" value="Toggle" /></td>
 
-                		<?php if ($RegistrationActive == 0) { ?>
-                			<td> WARNING: Reenabling registration will drop the complete matching table </td>
-                		<?php } else { ?>
-                			<td>  </td>
-                		<?php } ?>
-                	</tr>
-        	    </table>
+                        <?php if ($RegistrationActive == 0) { ?>
+                            <td> WARNING: Reenabling registration will drop the complete matching table </td>
+                        <?php } else { ?>
+                            <td>  </td>
+                        <?php } ?>
+                    </tr>
+                </table>
             </form>
 
             <!--  If registration is off, show table create button -->
             <?php if ($RegistrationActive == 0) { ?>
             <form action="admin.php" method="post">
                 <table border="1" >
-                	<?php
-                    	echo "<tr>";
-                    	echo "<td>Mapping table exists: $MappingTableExists</td>";
-                    	if ($MappingTableExists == 0)
-                    	   echo "<td> <input type=\"submit\" name=\"createTable\" value=\"Create Mapping Table\" /></td>";
-                    	else
-                    	   echo "<td> </td>";
+                    <?php
+                        echo "<tr>";
+                        echo "<td>Mapping table exists: $MappingTableExists</td>";
+                        if ($MappingTableExists == 0)
+                           echo "<td> <input type=\"submit\" name=\"createTable\" value=\"Create Mapping Table\" /></td>";
+                        else
+                           echo "<td> </td>";
 
-                	    echo "<td> </td>";
-                    	echo "</tr>";
-                	?>
-        	    </table>
-      	  	</form>
-      	  		<?php if (array_key_exists("returnValueCreateMappingTable", $_SESSION))
-      	  		{
-      	  		    echo "<tr>";
-      	  		    if ($_SESSION["returnValueCreateMappingTable"] == 0)
-      	  		         echo "<td> Mapping table creation: valid</td>";
-  	  		        else if ($_SESSION["returnValueCreateMappingTable"] == -2)
-  	  		            echo "<td> Mapping table creation: INVALID, please retry </td>";
-      	  		    echo "<td></td>";
-      	  		    echo "<td></td>";
-      	  		    echo "</tr>";
-      	  		}
-      	  		?>
-				<?php if ($MappingTableExists == 1) { ?>
-					<!--  Randomize users into mapping table -->
-    	            <form action="admin.php" method="post">
+                        echo "<td> </td>";
+                        echo "</tr>";
+                    ?>
+                </table>
+                </form>
+                    <?php if (array_key_exists("returnValueCreateMappingTable", $_SESSION))
+                    {
+                        echo "<tr>";
+                        if ($_SESSION["returnValueCreateMappingTable"] == 0)
+                             echo "<td> Mapping table creation: valid</td>";
+                        else if ($_SESSION["returnValueCreateMappingTable"] == -2)
+                            echo "<td> Mapping table creation: INVALID, please retry </td>";
+                        echo "<td></td>";
+                        echo "<td></td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                <?php if ($MappingTableExists == 1) { ?>
+                    <!--  Randomize users into mapping table -->
+                    <form action="admin.php" method="post">
                         <table border="1" >
-                        	<tr>
-                        		<td> </td>
-                        		<td> <input type="submit" name="randomize" value="Randomize Users" /></td>
-                        		<td> </td>
-                        	</tr>
+                            <tr>
+                                <td> </td>
+                                <td> <input type="submit" name="randomize" value="Randomize Users" /></td>
+                                <td> </td>
+                            </tr>
 
-                        	<?php
+                            <?php
 
-                        	for ($x = 1; $x <= $NumberOfUsers; $x++)
-                        	{
-                        	    $UserFirstName = sharedSqlWrapper_getFirstName($x);
-                        	    $UserLastName = sharedSqlWrapper_getLastName($x);
-                        	    $Leaf1UserId = sharedSqlWrapper_getUseridOfReceiveLeaf($x, 1);
-                        	    $Leaf1FirstName = sharedSqlWrapper_getFirstName($Leaf1UserId);
-                        	    $Leaf1LastName = sharedSqlWrapper_getLastName($Leaf1UserId);
-                        	    $Leaf2UserId = sharedSqlWrapper_getUseridOfReceiveLeaf($x, 2);
-                        	    $Leaf2FirstName = sharedSqlWrapper_getFirstName($Leaf2UserId);
-                        	    $Leaf2LastName = sharedSqlWrapper_getLastName($Leaf2UserId);
+                            for ($x = 1; $x <= $NumberOfUsers; $x++)
+                            {
+                                $UserFirstName = sharedSqlWrapper_getFirstName($x);
+                                $UserLastName = sharedSqlWrapper_getLastName($x);
+                                $Leaf1UserId = sharedSqlWrapper_getUseridOfReceiveLeaf($x, 1);
+                                $Leaf1FirstName = sharedSqlWrapper_getFirstName($Leaf1UserId);
+                                $Leaf1LastName = sharedSqlWrapper_getLastName($Leaf1UserId);
+                                $Leaf2UserId = sharedSqlWrapper_getUseridOfReceiveLeaf($x, 2);
+                                $Leaf2FirstName = sharedSqlWrapper_getFirstName($Leaf2UserId);
+                                $Leaf2LastName = sharedSqlWrapper_getLastName($Leaf2UserId);
 
-                        	    echo "<tr>";
-                        	    echo "<td>$UserFirstName $UserLastName ($x)</td>";
-                        	    echo "<td>$Leaf1FirstName $Leaf1LastName ($Leaf1UserId) </td>";
-                        	    echo "<td>$Leaf2FirstName $Leaf2LastName ($Leaf2UserId) </td>";
-                        	    echo "</tr>";
-                        	}
+                                echo "<tr>";
+                                echo "<td>$UserFirstName $UserLastName ($x)</td>";
+                                echo "<td>$Leaf1FirstName $Leaf1LastName ($Leaf1UserId) </td>";
+                                echo "<td>$Leaf2FirstName $Leaf2LastName ($Leaf2UserId) </td>";
+                                echo "</tr>";
+                            }
 
-                        	?>
-                	    </table>
-              	  	</form>
+                            ?>
+                        </table>
+                        </form>
 
 
                     <form action="admin.php" method="post">
                         <table border="1" >
-                        	<?php
-                            	echo "<tr>";
-                            	echo "<td>Table is released to users: $SettingMappingReleasedToUsers</td>";
-                            	echo "<td> <input type=\"submit\" name=\"toggleSettingMappingReleasedToUsers\" value=\"Toggle\" /></td>";
-                        	    echo "<td> </td>";
-                            	echo "</tr>";
-                        	?>
-                	    </table>
-      	  			</form>
+                            <?php
+                                echo "<tr>";
+                                echo "<td>Table is released to users: $SettingMappingReleasedToUsers</td>";
+                                echo "<td> <input type=\"submit\" name=\"toggleSettingMappingReleasedToUsers\" value=\"Toggle\" /></td>";
+                                echo "<td> </td>";
+                                echo "</tr>";
+                            ?>
+                        </table>
+                        </form>
 
-				<?php } ?>
+                <?php } ?>
             <?php } ?>
 
-		  </div>
+          </div>
 
-		<?php include ("layout/footer.html"); ?>
-	</div>
+        <?php include ("layout/footer.html"); ?>
+    </div>
 
-	</body>
+    </body>
 </html>

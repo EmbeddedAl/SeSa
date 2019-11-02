@@ -1,19 +1,19 @@
 <div id="nav">
    <ul>
-      <?php 
+      <?php
          /* check user to be logged in */
          if (isset($_SESSION["username"]))
          {
             ?>
-            
+
             <?php echo "Logged in as: " . $_SESSION["username"] . "</br>"; ?>
-            
+
             <li><a href="forme.php">My wishlist</a></li>
             <li><a href="foryou.php">Wishlist of others</a></li>
             <li><a href="all.php">Participants</a></li>
             <li><a href="mysesa.php">My account</a></li>
             <li><a href="logout.php">Logout</a></li>
-            
+
             <?php
             if (isset($_SESSION["isadmin"]))
             {
@@ -21,7 +21,7 @@
                ?><li><a href="admin.php">admin area</a></li><?php
             }
          }
-         
+
          else
          {
          ?>
@@ -29,6 +29,6 @@
             <li><a href="index.php">Login</a></li>
          <?php
          }
-      ?> 
-   </ul>       
+      ?>
+   </ul>
 </div>

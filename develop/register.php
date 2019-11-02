@@ -113,27 +113,27 @@
 ?>
 
 <html>
-	<head>
-		<?php include ("layout/title.html"); ?>
-		<link rel="stylesheet" href="layout/style.css">
-	</head>
+    <head>
+        <?php include ("layout/title.html"); ?>
+        <link rel="stylesheet" href="layout/style.css">
+    </head>
 
-	<body>
-		<div id="page">
-			<?php include ("layout/header.html"); ?>
-			<?php include ("layout/nav.html"); ?>
+    <body>
+        <div id="page">
+            <?php include ("layout/header.html"); ?>
+            <?php include ("layout/nav.html"); ?>
 
-		<div id="content">
-			<?php if ($RegistrationActive == 1) { ?>
+        <div id="content">
+            <?php if ($RegistrationActive == 1) { ?>
 
 
-    			<?php if ($RegistrationCompleted == TRUE) { ?>
-                	<h2>Registration completed.</h2>
-                	<p> Now please login to SeSa. </p>
+                <?php if ($RegistrationCompleted == TRUE) { ?>
+                    <h2>Registration completed.</h2>
+                    <p> Now please login to SeSa. </p>
                 <?php } ?>
 
                 <?php if ($RegistrationCompleted == FALSE) { ?>
-                	<h2>Register a new user</h2>
+                    <h2>Register a new user</h2>
 
                     <form action="register.php" method="post">
                       <table>
@@ -178,16 +178,16 @@
                         </tr>
 
                       </table>
-        			</form>
-        			<?php } ?>
-        		<?php } else { ?>
-                	<h2>Registration is deactivated.</h2>
-                	<p> Please contact your administrator.</p>
-    			<?php } ?>
-		  </div>
+                    </form>
+                    <?php } ?>
+                <?php } else { ?>
+                    <h2>Registration is deactivated.</h2>
+                    <p> Please contact your administrator.</p>
+                <?php } ?>
+          </div>
 
-		<?php include ("layout/footer.html"); ?>
-	</div>
-	</body>
+        <?php include ("layout/footer.html"); ?>
+    </div>
+    </body>
 
 </html>

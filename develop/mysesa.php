@@ -40,15 +40,15 @@
 
 
 <html>
-	<head>
-		<?php include ("layout/title.html"); ?>
-		<link rel="stylesheet" href="layout/style.css">
-	</head>
+    <head>
+        <?php include ("layout/title.html"); ?>
+        <link rel="stylesheet" href="layout/style.css">
+    </head>
 
-	<body>
-		<div id="page">
-			<?php include ("layout/header.html"); ?>
-			<?php include ("layout/nav.html"); ?>
+    <body>
+        <div id="page">
+            <?php include ("layout/header.html"); ?>
+            <?php include ("layout/nav.html"); ?>
 
          <div id="content">
             <h2>My account</h2>
@@ -60,68 +60,68 @@
                   <td align="left"><?php echo $_SESSION["username"]; ?></td>
                   <td width=200><img src="<?php echo sharedHelpers_getUserImageFile($_SESSION["userid"]); ?>" border="4"></td>
                 </tr>
-				<tr>
-				    <td align="left">Firstname:</td>
-				    <td align="left"><?php echo $_SESSION["firstname"]; ?></td>
+                <tr>
+                    <td align="left">Firstname:</td>
+                    <td align="left"><?php echo $_SESSION["firstname"]; ?></td>
                 </tr>
-				<tr>
-				    <td align="left">Lastname:</td>
-				    <td align="left"><?php echo $_SESSION["lastname"]; ?></td>
+                <tr>
+                    <td align="left">Lastname:</td>
+                    <td align="left"><?php echo $_SESSION["lastname"]; ?></td>
                 </tr>
-				<tr>
-				    <td align="left">Email:</td>
-				    <td align="left"><?php echo $_SESSION["email"]; ?></td>
+                <tr>
+                    <td align="left">Email:</td>
+                    <td align="left"><?php echo $_SESSION["email"]; ?></td>
                 </tr>
-				<tr>
-				    <td align="left">City:</td>
-				    <td align="left"><?php echo $_SESSION["city"]; ?></td>
-                </tr>
-
-
-
-				<!-- -------------------------------------- -->
-				<!-- Show input tags if edit mode is active -->
-				<!-- -------------------------------------- -->
-				<?php if (isset($_POST["editActive"])) { ?>
-				<tr>
-				    <td align="left">Password:</td>
-				    <td align="left"><input type="password" name="password"/></td>
-                </tr>
-				<tr>
-				    <td align="left"></td>
-				    <td align="left"><input type="submit" name="commit" value="save password" /></td>
+                <tr>
+                    <td align="left">City:</td>
+                    <td align="left"><?php echo $_SESSION["city"]; ?></td>
                 </tr>
 
 
 
+                <!-- -------------------------------------- -->
+                <!-- Show input tags if edit mode is active -->
+                <!-- -------------------------------------- -->
+                <?php if (isset($_POST["editActive"])) { ?>
+                <tr>
+                    <td align="left">Password:</td>
+                    <td align="left"><input type="password" name="password"/></td>
+                </tr>
+                <tr>
+                    <td align="left"></td>
+                    <td align="left"><input type="submit" name="commit" value="save password" /></td>
+                </tr>
 
-				<!-- -------------------------------------- -->
-				<!-- Show values only -->
-				<!-- -------------------------------------- -->
+
+
+
+                <!-- -------------------------------------- -->
+                <!-- Show values only -->
+                <!-- -------------------------------------- -->
                 <?php } else { ?>
-				<tr>
-				    <td align="left">Password:</td>
-				    <td align="left">********</td>
+                <tr>
+                    <td align="left">Password:</td>
+                    <td align="left">********</td>
                 </tr>
-				<tr>
-				    <td align="left"></td>
-				    <td align="left" style="color:red"><?php echo $FormPasswordValid; ?></td>
+                <tr>
+                    <td align="left"></td>
+                    <td align="left" style="color:red"><?php echo $FormPasswordValid; ?></td>
                 </tr>
-				<tr>
-				    <td align="left"></td>
-				    <td align="left"><input type="submit" name="editActive" value="change password" /></td>
+                <tr>
+                    <td align="left"></td>
+                    <td align="left"><input type="submit" name="editActive" value="change password" /></td>
                 </tr>
-				<?php  } ?>
+                <?php  } ?>
 
 
 
 
               </table>
               </form>
-		  </div>
+          </div>
 
-		<?php include ("layout/footer.html"); ?>
-	</div>
+        <?php include ("layout/footer.html"); ?>
+    </div>
 
-	</body>
+    </body>
 </html>

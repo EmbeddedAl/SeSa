@@ -34,15 +34,15 @@
    }
 ?>
 <html>
-	<head>
-		<?php include ("layout/title.html"); ?>
-		<link rel="stylesheet" href="layout/style.css">
-	</head>
+    <head>
+        <?php include ("layout/title.html"); ?>
+        <link rel="stylesheet" href="layout/style.css">
+    </head>
 
-	<body>
-		<div id="page">
-			<?php include ("layout/header.html"); ?>
-			<?php include ("layout/nav.html"); ?>
+    <body>
+        <div id="page">
+            <?php include ("layout/header.html"); ?>
+            <?php include ("layout/nav.html"); ?>
 
          <div id="content">
             <h2>Who is participating?</h2>
@@ -66,10 +66,10 @@
                   }
                ?>
             </table>
-		  </div>
+          </div>
 
-		<?php include ("layout/footer.html"); ?>
-	</div>
+        <?php include ("layout/footer.html"); ?>
+    </div>
 
-	</body>
+    </body>
 </html>
