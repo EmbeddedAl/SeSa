@@ -179,7 +179,7 @@ function sharedSqlWrapper_createMappingTable($numPresents)
         /* and insert it into database - hereby a new row will be added to mapping */
         $sqlStatement = "INSERT INTO mapping (receiveLeaf01) VALUES (" . $nextRowNumber . ")";
         if ($sqlConnection->query( $sqlStatement ) != TRUE)
-            goto end;
+            goto errorend;
 
         /* also store this information in the ram copy */
         $mappingTable[$thisMappingRow]['receiveLeaf01'] = $nextRowNumber;
@@ -200,7 +200,7 @@ function sharedSqlWrapper_createMappingTable($numPresents)
                 continue;
 
             /* if the random one is already connected, try again */
-            if ($mappingTable[$thisMappingRow]['receiveLeaf01'] == $thisMappingRow)
+            if ($mappingTable[$thisMappingRow]['receiveLeaf01'] == $randomRow)
                 continue;
 
             /* if already in pool of completed, do it again */
@@ -211,11 +211,7 @@ function sharedSqlWrapper_createMappingTable($numPresents)
         }
 
         if ($giveUpCounter <= 0)
-        {
-            sharedSqlWrapper_dropMappingTable();
-            $returnValue = -2;
-            goto end;
-        }
+            goto errorend;
 
         /* add 'next' to the pool of already used indexes */
         $PoolOfCompleted[] = $randomRow;
@@ -233,6 +229,12 @@ function sharedSqlWrapper_createMappingTable($numPresents)
 
 end:
     sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+
+errorend:
+    sharedSqlWrapper_dropMappingTable();
+    sharedSqlWrapper_disconnect($sqlConnection);
+    $returnValue = -2;
     return $returnValue;
 }
 

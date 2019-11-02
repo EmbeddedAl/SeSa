@@ -45,6 +45,10 @@
         /* if table was created successfully do the initial randomization round automatically */
         sharedSqlWrapper_randomizeUsersToMapping();
     }
+    else
+    {
+        unset($_SESSION["returnValueCreateMappingTable"]);
+    }
 
     /* Randomize users in */
     if (isset($_POST['randomize']))
