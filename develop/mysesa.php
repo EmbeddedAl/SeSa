@@ -58,23 +58,24 @@
                 <tr>
                   <td align="left">Username:</td>
                   <td align="left"><?php echo $_SESSION["username"]; ?></td>
-                  <td width=200><img src="<?php echo sharedHelpers_getUserImageFile($_SESSION["userid"]); ?>" border="4"></td>
+                  <td width=200><?php echo "<img src=" . sharedHelpers_getUserImageFile($_SESSION['userid']) . " border=\"4\">" ?> </td>
                 </tr>
                 <tr>
                     <td align="left">Firstname:</td>
-                    <td align="left"><?php echo $_SESSION["firstname"]; ?></td>
+                    <td align="left" colspan="2"><?php echo $_SESSION["firstname"]; ?></td>
+
                 </tr>
                 <tr>
                     <td align="left">Lastname:</td>
-                    <td align="left"><?php echo $_SESSION["lastname"]; ?></td>
+                    <td align="left" colspan="2"><?php echo $_SESSION["lastname"]; ?></td>
                 </tr>
                 <tr>
                     <td align="left">Email:</td>
-                    <td align="left"><?php echo $_SESSION["email"]; ?></td>
+                    <td align="left" colspan="2"><?php echo $_SESSION["email"]; ?></td>
                 </tr>
                 <tr>
                     <td align="left">City:</td>
-                    <td align="left"><?php echo $_SESSION["city"]; ?></td>
+                    <td align="left" colspan="2"><?php echo $_SESSION["city"]; ?></td>
                 </tr>
 
 
