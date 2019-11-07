@@ -329,7 +329,7 @@ function sharedSqlWrapper_setSetting($settingName, $settingValue)
         return $returnValue;
 
     /* update into users */
-        $sqlStatement = "UPDATE settings SET VALUE ='" . $settingValue . "' where setting = '". $settingName . "'";
+    $sqlStatement = "UPDATE settings SET VALUE ='" . $settingValue . "' where setting = '". $settingName . "'";
 
     /* query the database */
     $sqlResult = $sqlConnection->query($sqlStatement);
@@ -527,6 +527,130 @@ function shareSqlWrapper_updateUserPassword($userid, $passwordMD5)
 
     /* update into users */
     $sqlStatement = "UPDATE users SET password ='" . $passwordMD5 . "' where userid = " . $userid;
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    $returnValue = 0;
+
+end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+
+function sharedSqlWrapper_getListOfFreePresentsOfUser($userid)
+{
+    $returnValue = Array();
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* build select statement */
+    $sqlStatement = "SELECT `pid` FROM `presents` WHERE `puserid`= " . $userid . " AND `plockid` IS NULL";
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    /* extract results */
+    $rowCounter = $sqlResult->num_rows;
+    while($rowCounter > 0)
+    {
+        /* get the actual data base row */
+        $sqlRow = $sqlResult->fetch_assoc();
+        $returnValue[] = $sqlRow['pid'];
+        $rowCounter--;
+    }
+
+end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+
+function sharedSqlWrapper_getListOfPresentsOfUserALockedByUserB($userA, $userB)
+{
+    $returnValue = Array();
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* build select statement */
+    $sqlStatement = "SELECT `pid` FROM `presents` WHERE `puserid`= " . $userA . " AND `plockid`=" . $userB;
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    /*extract results */
+    $rowCounter = $sqlResult->num_rows;
+    while($rowCounter > 0)
+    {
+        /* get the actual data base row */
+        $sqlRow = $sqlResult->fetch_assoc();
+        $returnValue[] = $sqlRow['pid'];
+        $rowCounter--;
+    }
+
+end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+
+function sharedSqlWrapper_getPresentInformation($PresentID)
+{
+    $returnValue = Array();
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* build select statement */
+    $sqlStatement = "SELECT `pname`, `pdesc` FROM `presents` WHERE `pid`= " . $PresentID;
+
+    /* query the database */
+    $sqlResult = $sqlConnection->query($sqlStatement);
+    if ($sqlResult != TRUE)
+        goto end;
+
+    /* there should be exactly one */
+    $rowCounter = $sqlResult->num_rows;
+    while($rowCounter > 0)
+    {
+        /* get the actual data base row */
+        $sqlRow = $sqlResult->fetch_assoc();
+        $returnValue['pname'] = $sqlRow['pname'];
+        $returnValue['pdesc'] = $sqlRow['pdesc'];
+        $rowCounter--;
+    }
+
+end:
+    sharedSqlWrapper_disconnect($sqlConnection);
+    return $returnValue;
+}
+
+function sharedSqlWrapper_lockPresentToUser($PresentID, $LockId = "NULL")
+{
+    $returnValue = -1;
+
+    /* open connection */
+    $sqlConnection = sharedSqlWrapper_connect();
+    if ($sqlConnection == null)
+        return $returnValue;
+
+    /* build select statement */
+    $sqlStatement = "UPDATE presents SET plockid=" . $LockId . " WHERE pid= " . $PresentID;
 
     /* query the database */
     $sqlResult = $sqlConnection->query($sqlStatement);

@@ -10,6 +10,7 @@
 
    /* config is needed for connection to db */
    include "config.php";
+   include "sharedphp/sharedSqlWrapper.php";
 
    /* open sql connection */
    $sqlConnection = new mysqli ( $dbhost, $dbuser, $dbpass, $dbase );

@@ -13,5 +13,11 @@ function sharedHelpers_getUserImageFile($userid)
 
 
 
+function startsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+    return (substr($haystack, 0, $length) === $needle);
+}
+
 
 ?>
