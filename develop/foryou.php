@@ -91,7 +91,9 @@
         }
     }
 
-    function printPresentTableForPartner($PartnerFirstName, $PartnerLastName, $PartnerUserId, $partnerFreePresentsList, $partnerLockedPresentsList)
+    $_POST = array();
+
+function printPresentTableForPartner($PartnerFirstName, $PartnerLastName, $PartnerUserId, $partnerFreePresentsList, $partnerLockedPresentsList)
 {
     echo "<table border=\"1\">";
     echo "<tr> <td width=\"490\" align=\"center\" colspan=\"4\"> <b>" . $PartnerFirstName . " " . $PartnerLastName . "</b> </td> </tr>";
