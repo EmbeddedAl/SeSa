@@ -6,7 +6,10 @@
 <?php
     /* require user to be logged in */
     if (!isset($_SESSION["userid"]))
+    {
         echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
+        return;
+    }
 
     include "config.php";
     include 'sharedphp/sharedHelpers.php';

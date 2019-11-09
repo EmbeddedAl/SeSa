@@ -10,11 +10,17 @@
 
     /* require user to be logged in */
     if (!isset($_SESSION["userid"]))
+    {
         echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
+        return;
+    }
 
     /* require user to be admin */
     if (!isset($_SESSION["isadmin"]))
+    {
         echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
+        return;
+    }
 
     /* get number of registered users for admin mapping table */
     $NumberOfUsers = sharesSqlWrapper_getNumberOfUsers();

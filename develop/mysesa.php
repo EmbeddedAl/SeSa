@@ -11,7 +11,10 @@
 
    /* require user to be logged in */
    if (!isset($_SESSION["userid"]))
-      echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
+   {
+       echo "<meta http-equiv=\"refresh\" content=\"0; url=index.php\">";
+       return;
+   }
 
    $FormPasswordValid = "";
    $FormPassword = $_POST["password"];
